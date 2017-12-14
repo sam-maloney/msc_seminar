@@ -22,7 +22,7 @@
 
 \usepackage{geometry} 
 \geometry{a4paper} 
-\usepackage[parfill]{parskip}    								% Activate to begin paragraphs with an empty line
+\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line
 \usepackage[pdftex]{graphicx}
 \usepackage{epstopdf}
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
@@ -30,9 +30,9 @@
 
 \usepackage[usenames]{color}
 
-\usepackage{listings} 						% Einfügen von Programmcode
+\usepackage{listings} 							% Einfügen von Programmcode
 \lstset{numbers=left, numberstyle=\tiny, numbersep=5pt} 	% mit Zeilennummerierung links
-\lstset{language=[77]Fortran}								%Programmiersprache: Fortran77
+\lstset{language=[77]Fortran}						% Programming language: Fortran77
 
 
 %text with 2.5cm on both sides (A4=210mm)
@@ -63,16 +63,16 @@
 \fancyfoot{} 
 
 \renewcommand{\chaptermark}[1]{         		% Lower Case Chapter marker style
-\markboth{\chaptername\ \thechapter.\ #1}{}} 		%
+\markboth{\chaptername\ \thechapter.\ #1}{}}	%
 \renewcommand{\sectionmark}[1]{         		% Lower case Section marker style
 \markright{\thesection.\ #1}}         			%
 \fancyfoot[R]{\thepage}    				% Page number in the right on every page
 \fancyhead[L]{\leftmark}       				% Chapter in the right on even pages
 \fancyhead[L]{\rightmark}     				% Section in the left on odd pages
-\renewcommand{\headrulewidth}{0.3pt}   			% Width of head rule
+\renewcommand{\headrulewidth}{0.3pt}		% Width of head rule
 
 \fancypagestyle{plain}{					%
-\fancyhf{} 						% clear all header and footer fields
+\fancyhf{}							% clear all header and footer fields
 \fancyfoot[R]{\thepage}    				% Page number in the right on every page
 \fancyhead[L]{\leftmark}       				% Chapter in the right on even pages
 \renewcommand{\headrulewidth}{0.3pt}}   		% Width of head rule
@@ -92,7 +92,7 @@
 \begin{titlepage}
 \begin{center}
     \vspace*{1cm}
-    {\huge \bfseries  Development of a Regularization Term in a TLES Code in OpenFOAM\\ }
+    {\huge \bfseries  Development of a regularization term in a TLES code in OpenFOAM\\ }
     \vspace{2cm}
     {\large 
 	Samuel Maloney\\
@@ -165,17 +165,18 @@
 %------------------------------------------------------------------------------------------------------------------------------
 %\include{........}
 
-%Bibliography
+% Bibliography
 %------------------------------------------------------------------------------------------------------------------------------
 \include{Bibliography}
 
 %Attachment
 %------------------------------------------------------------------------------------------------------------------------------
-\appendix
-\renewcommand{\chaptermark}[1]{         		% Benutze "Anhang" statt "Kapitel" in den Kopfzeilen
-\markboth{Attachment\ \thechapter.\ #1}{}} 
 
-\include{Appendix}
+%\appendix
+%\renewcommand{\chaptermark}[1]{         		% Benutze "Anhang" statt "Kapitel" in den Kopfzeilen
+%\markboth{Attachment\ \thechapter.\ #1}{}} 
+
+%\include{Appendix}
 
 
 
