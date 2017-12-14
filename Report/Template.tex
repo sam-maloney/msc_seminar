@@ -1,0 +1,197 @@
+% PREAMBLE
+% ***************************************************************************************************
+
+\documentclass[smallheadings,headsepline,11pt,oneside,a4paper]{scrbook}
+
+% Hier gibt man an, welche Art von Dokument man schreiben möchte.
+% Möglichkeiten in {}: scrartcl, scrreprt, scrbook, aber auch: article, report, book
+
+\usepackage[english]{babel} 		% changed to remove German
+\usepackage[utf8]{inputenc} 		% teilt LaTeX die Texcodierung mit. Bei Windowssystemen: ansinew
+\usepackage[T1]{fontenc} 		% ermöglicht die Silbentrennung von Wörtern mit Umlauten
+
+\usepackage[usenames,dvipsnames]{color}
+
+% PDF wird mit Lesezeichen (verlinktes Inhaltsverzeichnis) versehen (bei Betrachtung mit Acrobat Reader sichtbar)
+\definecolor{farbelink}{rgb}{0,0,0}	% Definition der Linkfarbe für das PDF-File
+\usepackage[pdftex,colorlinks=true,urlcolor=farbelink,linkcolor=farbelink,citecolor=farbelink]{hyperref}
+
+\usepackage{lscape}
+
+\usepackage{amssymb,amsmath}
+
+\usepackage{geometry} 
+\geometry{a4paper} 
+\usepackage[parfill]{parskip}    								% Activate to begin paragraphs with an empty line
+\usepackage[pdftex]{graphicx}
+\usepackage{epstopdf}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+\usepackage[margin=10pt,font=small,labelfont=bf]{caption}	% Package for picture captions
+
+\usepackage[usenames]{color}
+
+\usepackage{listings} 						% Einfügen von Programmcode
+\lstset{numbers=left, numberstyle=\tiny, numbersep=5pt} 	% mit Zeilennummerierung links
+\lstset{language=[77]Fortran}								%Programmiersprache: Fortran77
+
+
+%text with 2.5cm on both sides (A4=210mm)
+\setlength{\textwidth}{160mm}
+\setlength{\evensidemargin}{0in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\columnsep}{0.25in}
+%
+%text with 2.5cm on top and 2.5cm on bottom (A4=297mm)
+\setlength{\textheight}{247mm}
+\setlength{\topmargin}{0pt}
+\setlength{\headsep}{25pt}
+\setlength{\headheight}{0pt}
+
+
+%\typearea{12} % Breite des bedruckten Bereiches vergrössern (funktioniert nur in \documentclass mit: scrreprt, scrartcl, scrbook)
+
+\clubpenalty = 10000 		% schliesst Schusterjungen aus
+\widowpenalty = 10000 		% schliesst Hurenkinder aus
+
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}		% Selbst gestaltete Kopf-/Fusszeilen
+
+%%% Fancy Header %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Fancy Header Style Options
+\fancyhf{}
+\fancyfoot{} 
+
+\renewcommand{\chaptermark}[1]{         		% Lower Case Chapter marker style
+\markboth{\chaptername\ \thechapter.\ #1}{}} 		%
+\renewcommand{\sectionmark}[1]{         		% Lower case Section marker style
+\markright{\thesection.\ #1}}         			%
+\fancyfoot[R]{\thepage}    				% Page number in the right on every page
+\fancyhead[L]{\leftmark}       				% Chapter in the right on even pages
+\fancyhead[L]{\rightmark}     				% Section in the left on odd pages
+\renewcommand{\headrulewidth}{0.3pt}   			% Width of head rule
+
+\fancypagestyle{plain}{					%
+\fancyhf{} 						% clear all header and footer fields
+\fancyfoot[R]{\thepage}    				% Page number in the right on every page
+\fancyhead[L]{\leftmark}       				% Chapter in the right on even pages
+\renewcommand{\headrulewidth}{0.3pt}}   		% Width of head rule
+
+
+\setlength{\textheight}{21cm}				% Vergrössert die Höhe des bedruckbaren Bereichs
+
+
+\begin{document}
+
+\frontmatter						% Roman numeral page numbers
+
+% TITLE PAGE
+% ***************************************************************************************************
+% use FS or HS to identify the semester, FS (Fruehling) for spring semester, HS (Herbst) for fall semester
+
+\begin{titlepage}
+\begin{center}
+    \vspace*{1cm}
+    {\huge \bfseries  Development of a Regularization Term in a TLES Code in OpenFOAM\\ }
+    \vspace{2cm}
+    {\large 
+	Samuel Maloney\\
+	~\\
+	Computational Science and Engineering Master\\
+	\vspace{3.5cm}
+	Seminar in Fluid Dynamics for CSE HS 2017\\
+	~\\
+	Institute of Fluid Dynamics\\
+	ETH Zürich\\
+    }
+
+\vspace{\stretch{1}}
+
+
+
+{\large
+	Supervisor: Daniel Oberle\\[\baselineskip]
+	Professor: Patrick Jenny
+}
+\end{center}
+
+\vspace*{2cm} % a bit of space at the bottom of the page
+
+\end{titlepage}
+
+%\clearpage\null
+
+
+% Insert a blank page after the title page
+\begin{titlepage}
+\thispagestyle{empty}
+\newpage
+\mbox{}
+\end{titlepage}
+
+
+% ABSTRACT
+% ***************************************************************************************************
+\include{Abstract}
+
+
+
+% TABLE OF CONTENTS
+% ***************************************************************************************************
+
+\tableofcontents
+% Dieser Befehl erstellt das Inhaltsverzeichnis. Damit die Seitenzahlen korrekt sind, muss das Dokument zweimal gesetzt werden!
+
+
+
+% MAIN SECTION
+% ***************************************************************************************************
+% Folgende Befehle stehen für die Gliederung zur Verfügung: \chapter \section \subsection \subsubsection \paragraph
+% Für Anführungszeichen: "` (CH-Tastatur: ZUERST: Shift-Tast und Taste 2, DANN: Shift-Taste und Taste ^)
+% Für Schlusszeichen: "' (CH- Tastatur: ZUERST: Shift-Tast und Taste 2, DANN:  '-Taste, rechts neben der Null)
+% Für Neuen Abschnitt: Eine Zeile leer lassen.
+
+
+\mainmatter	% Arabic page numbers
+
+
+%1. Introduction
+%------------------------------------------------------------------------------------------------------------------------------
+\include{Introduction}
+
+%Addtional Chapters
+
+%2. Vorgehen
+%------------------------------------------------------------------------------------------------------------------------------
+%\include{........}
+
+%Bibliography
+%------------------------------------------------------------------------------------------------------------------------------
+\include{Bibliography}
+
+%Attachment
+%------------------------------------------------------------------------------------------------------------------------------
+\appendix
+\renewcommand{\chaptermark}[1]{         		% Benutze "Anhang" statt "Kapitel" in den Kopfzeilen
+\markboth{Attachment\ \thechapter.\ #1}{}} 
+
+\include{Appendix}
+
+
+
+%ABBILDUNGSVERZEICHNIS
+% ***************************************************************************************************
+%\clearpage
+%\phantomsection
+%\addcontentsline{toc}{chapter}{Abbildungsverzeichnis}
+%\listoffigures
+
+%TABELLENVERZEICHNIS
+% ***************************************************************************************************
+%\clearpage
+%\phantomsection
+%\addcontentsline{toc}{chapter}{Tabellenverzeichnis}
+%\listoftables
+
+
+\end{document}
