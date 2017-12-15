@@ -4,19 +4,65 @@
 
 DNS is computationally expensive, so go TLES!
 
+An brief overview of some of the basic theory underpinning TLES is presented next, adapting from the work presented by Pruett \cite{Pruett2008} and Jenny \cite{Jenny2016}.
+
 \section{TLES}
 
 Since for TLES filtering is done during the course of the numerical experiments, the filtering operation must be \emph{causal}, ie. it must depend only upon the current and previous values of the quantity being filtered and not on any future values. Letting an overbar denote a time-filtered quantity and $T$ denote the characteristic filter width, one obtains the following causal time-filtering operation for some filter kernal $G(t,T)$:
-$$\bar{f}(t,T)=\int_{-\infty}^{t}G(\tau -t;T)f(\tau)d\tau$$
+\begin{equation}
+\bar{f}(t,T)=\int_{-\infty}^{t}G(\tau -t;T)f(\tau)d\tau
+\end{equation}
 
 In this work only the exponential filter is discussed, namely:
-$$G(t;T)=\frac{\exp(t/T)}{T} \longrightarrow \bar{f}(t,T)=\frac{1}{T}\int_{-\infty}^{t}\exp\left(\frac{\tau-t}{T}\right)f(\tau)d\tau$$
+\begin{equation}
+G(t;T)=\frac{\exp(t/T)}{T} \longrightarrow \bar{f}(t,T)=\frac{1}{T}\int_{-\infty}^{t}\exp\left(\frac{\tau-t}{T}\right)f(\tau)d\tau
+\end{equation}
 
 which is a second order low-pass filter and has the transfer function:
-$$H(\omega,T)=\frac{1}{1+iT\omega}$$
+\begin{equation}
+H(\omega,T)=\frac{1}{1+iT\omega}
+\end{equation}
 
 Since the integral formulation would require storage of the quanitity at all previous time points in the simulation, the following equivalent differential form is used for implementation, as it can be integrated using standard time-marching schemes to update the filtered quantities at each step (where the explicit time-dependence of the quanitites is now dropped for convenience):
-$$\frac{\partial \bar{f}}{\partial t}=\frac{f-\bar{f}}{T}$$
+\begin{equation} \label{filter_diff}
+\frac{\partial \bar{f}}{\partial t}=\frac{f-\bar{f}}{T}
+\end{equation}
+
+Applying such a filtering operation to the incompressible Navier-Stokes equations gives the following system for the evolution of temporally-filtered velocity fields, using the same initial condition as for the unfiltered fields $\bar{u}(0,x;T)=u(0,x)$:
+\begin{equation}
+\frac{\partial \bar{u}_j}{\partial x_j}=0
+\end{equation}
+\begin{equation} \label{TFNS}
+\frac{\partial \bar{u}_i}{\partial t}+\frac{\partial (\bar{u}_i\bar{u}_j)}{\partial x_j}=-\frac{\partial \bar{p}}{\partial x_i}+\nu \frac{\partial^2 \bar{u}_i}{\partial x_j \partial x_j}-\frac{\partial \tau_{ij}}{\partial x_j}
+\end{equation}
+
+where $u$ is the fluid velocity, $p$ is the pressure, $\nu$ is the kinematic pressure, and subscripts $i,j\in\{1,2,3\}$ indicate the 3D cartesian direction. The element $\tau$ in the final term is referred to as the \emph{temporal stress tensor} and is defined as:
+\begin{equation}
+\tau_{ij}=\overline{u_i u}_j-\bar{u}_i\bar{u}_j
+\end{equation}
+
+Solving the temporally-filtered Navier-Stokes equations requires a residual-stress model to handle the unkown value $\overline{u_i u}_j$ and close the system. Stolz and Adams \cite{Stolz2001} dveloped an approximate deconvolution model (ADM) for for spatial LES which was then adapted for TLES by Pruett \cite{Pruett2008}. For this project, however, a new method termed the temporal exact deconvolution model TEDM created by Jenny \cite{Jenny2016} is used to provide the closure.
+
+For the TEDM method, it is observed that by inserting the velocity field into the differential form of the filter given in Eq. (\ref{filter_diff}) the unfiltered field can be recovered as follows:
+\begin{equation} \label{deconv}
+u_i=\bar{u}_i+T\frac{\partial \bar{u}_i}{\partial t}
+\end{equation}
+
+The same Eq. (\ref{filter_diff}) can then be applied to the unknown quantity $\overline{u_i u}_j$ and the just obtained relation for the unfiltered field in Eq. (\ref{deconv}) can be inserted in the resulting expression to obtain the following:
+\begin{equation}
+\begin{split}
+\frac{\partial{\overline{u_i u}_j}}{\partial t}&=\frac{u_i u_j-\overline{u_i u}_j}{T} \\
+&=\frac{\left( \bar{u}_i+T\frac{\partial \bar{u}_i}{\partial t} \right) \left( \bar{u}_j+T\frac{\partial \bar{u}_j}{\partial t} \right)-\overline{u_i u}_j}{T} \\
+&=\frac{\bar{u}_i \bar{u}_j-\overline{u_i u}_j}{T}+\bar{u}_i\frac{\partial \bar{u}_j}{\partial t}+\bar{u}_j\frac{\partial \bar{u}_i}{\partial t}+T\frac{\partial \bar{u}_i}{\partial t}\frac{\partial \bar{u}_j}{\partial t}
+\end{split}
+\end{equation}
+
+This can then be rearranged to produce an equation for the time evolution of the temporal stress tensor $\tau$ containing only the known filtered velocities:
+\begin{equation} \label{tau}
+\frac{\partial \tau_{ij}}{\partial t}=-\frac{\tau_{ij}}{T}+T\frac{\partial \bar{u}_i}{\partial t}\frac{\partial \bar{u}_j}{\partial t}
+\end{equation}
+
+Suitable time integration schemes can then be used to solve Eqs. (\ref{TFNS}) and (\ref{tau}) in alternation to evolve the system in time.
 
 \section{Regularization}
 
