@@ -2,3 +2,26 @@
 
 %Chapter giving an introduction to the topic and the present work
 
+DNS is computationally expensive, so go TLES!
+
+\section{TLES}
+
+Since for TLES filtering is done during the course of the numerical experiments, the filtering operation must be \emph{causal}, ie. it must depend only upon the current and previous values of the quantity being filtered and not on any future values. Letting an overbar denote a time-filtered quantity and $T$ denote the characteristic filter width, one obtains the following causal time-filtering operation for some filter kernal $G(t,T)$:
+$$\bar{f}(t,T)=\int_{-\infty}^{t}G(\tau -t;T)f(\tau)d\tau$$
+
+In this work only the exponential filter is discussed, namely:
+$$G(t;T)=\frac{\exp(t/T)}{T} \longrightarrow \bar{f}(t,T)=\frac{1}{T}\int_{-\infty}^{t}\exp\left(\frac{\tau-t}{T}\right)f(\tau)d\tau$$
+
+which is a second order low-pass filter and has the transfer function:
+$$H(\omega,T)=\frac{1}{1+iT\omega}$$
+
+Since the integral formulation would require storage of the quanitity at all previous time points in the simulation, the following equivalent differential form is used for implementation, as it can be integrated using standard time-marching schemes to update the filtered quantities at each step (where the explicit time-dependence of the quanitites is now dropped for convenience):
+$$\frac{\partial \bar{f}}{\partial t}=\frac{f-\bar{f}}{T}$$
+
+\section{Regularization}
+
+A regularization term based on work by \AA kervik et al. \cite{Akervik2006} was investigated as a potential means to improve the stability of the method, and is outlined here.
+
+\section{Divergence Cleaning}
+
+An implicit condition of the incompressible Navier-Stokes equations is that the divergence of the velocity field must be zero. However, numerical discretization schemes generally lead to non-zero values of the divergence which can be a potential source of isntability during simulations. To this end, explicit divergence cleaning (DC) using the projection scheme, following the procedure outlined in section 5 of the work by T\'oth \cite{Toth2000} for DC of magnetic fields, was also considered for possible stabilizing effects.

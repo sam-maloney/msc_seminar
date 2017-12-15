@@ -55,7 +55,7 @@
 
 
 \usepackage{fancyhdr}
-\pagestyle{fancy}		% Selbst gestaltete Kopf-/Fusszeilen
+\pagestyle{fancy}			% Selbst gestaltete Kopf-/Fusszeilen
 
 %%% Fancy Header %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Fancy Header Style Options
@@ -83,7 +83,7 @@
 
 \begin{document}
 
-\frontmatter						% Roman numeral page numbers
+\frontmatter							% Roman numeral page numbers
 
 % TITLE PAGE
 % ***************************************************************************************************
@@ -140,7 +140,7 @@
 % ***************************************************************************************************
 
 \tableofcontents
-% Dieser Befehl erstellt das Inhaltsverzeichnis. Damit die Seitenzahlen korrekt sind, muss das Dokument zweimal gesetzt werden!
+% This command inserts the table of contents. To ensure the page numbers are correct, the document should be generated twice!
 
 
 
@@ -149,21 +149,28 @@
 % Folgende Befehle stehen für die Gliederung zur Verfügung: \chapter \section \subsection \subsubsection \paragraph
 % Für Anführungszeichen: "` (CH-Tastatur: ZUERST: Shift-Tast und Taste 2, DANN: Shift-Taste und Taste ^)
 % Für Schlusszeichen: "' (CH- Tastatur: ZUERST: Shift-Tast und Taste 2, DANN:  '-Taste, rechts neben der Null)
-% Für Neuen Abschnitt: Eine Zeile leer lassen.
+% For new paragraphs: leave a blank line.
 
 
 \mainmatter	% Arabic page numbers
 
 
-%1. Introduction
+% 1. Introduction
 %------------------------------------------------------------------------------------------------------------------------------
 \include{Introduction}
 
-%Addtional Chapters
-
-%2. Vorgehen
+% 2. Implementation
 %------------------------------------------------------------------------------------------------------------------------------
-%\include{........}
+\include{Implementation}
+
+% 3. Results
+%------------------------------------------------------------------------------------------------------------------------------
+\include{Results}
+
+% 4. Conclusion
+%------------------------------------------------------------------------------------------------------------------------------
+\include{Conclusion}
+
 
 % Bibliography
 %------------------------------------------------------------------------------------------------------------------------------
@@ -173,7 +180,7 @@
 %------------------------------------------------------------------------------------------------------------------------------
 
 %\appendix
-%\renewcommand{\chaptermark}[1]{         		% Benutze "Anhang" statt "Kapitel" in den Kopfzeilen
+%\renewcommand{\chaptermark}[1]{         		% Use "Attachment" instead of "Chapter" in in the header
 %\markboth{Attachment\ \thechapter.\ #1}{}} 
 
 %\include{Appendix}

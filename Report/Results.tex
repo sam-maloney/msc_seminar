@@ -1,0 +1,7 @@
+\chapter{Results}
+
+%Chapter giving an overview of the numerical results obtained from the implementation
+
+All simulations were carried out on the standard Pitz-Daily backward facing step geometry provided with OpenFOAM. The numerical viscosity of $\nu=10^{-5} m^2/s$ and the inlet velocity of $u=10 m/s$ were kept constant for all runs. Using this inlet velocity and the channel width $L=50.8 mm$, the Reynold's number of the flow can be approximated as: $$ Re=\frac{uL}{\nu}=50800$$
+
+Since most cases of instability in the simulation manifested within the first few dozen time steps (approx. 30-40 or less), and given the large number of parameter sets that needed to be tested, for the purposes of this resport a simulation was considered 'stable' if it ran for 100 timesteps without failing. It is noted that a small number of the runs performed crashed even after 80+ timesteps, so this 100 timestep rule is certainly not an ironclad guarantee of stability over a much longer run. However, as in all of these cases it was the transition from stable to unstable that was under investigation, it suffices to warn that the reported minimal $\chi$ values required for stability should be regarded as providing only marginal stability, and slightly larger values might be safer in a real simulation to provide some margin of safety.
