@@ -1,5 +1,5 @@
 \chapter{Implementation}
 
-%Chapter giving an overview of the implementation of the method in OpenFOAM
+% Chapter giving an overview of the implementation of the method in OpenFOAM
 
-Implementation of the regularization term and divergence cleaning scheme was carried out using the open source OpenFOAM CFD code. For this seminar, a solver implementing the fundamental TLES methodology, which had been develped during a previous project, was used as a starting code.
+For this project, all implementation of the regularization term and divergence cleaning scheme was carried out in C++ using the open source OpenFOAM CFD code. A solver developed during a previous project at the institute, which implemented the fundamental TLES methodology, was used as a starting code. This solver already contained the necessary code for discretizing and solving Eq. (\ref{TFNS}) in the TFNS system for the filtered velocity, Eq. (\ref{tau}) for the temporal stress tensor, as well as computing the deconvoluted velocity field according to the TEDM and the mean filtered velocity field for statistical comparison and validation of the methods.

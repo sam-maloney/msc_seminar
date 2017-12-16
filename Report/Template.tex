@@ -4,11 +4,11 @@
 \documentclass[smallheadings,headsepline,11pt,oneside,a4paper]{scrbook}
 
 % Hier gibt man an, welche Art von Dokument man schreiben möchte.
-% Möglichkeiten in {}: scrartcl, scrreprt, scrbook, aber auch: article, report, book
+% Possibilities in {}: scrartcl, scrreprt, scrbook, but also: article, report, book
 
-\usepackage[english]{babel} 		% changed to remove German
-\usepackage[utf8]{inputenc} 		% teilt LaTeX die Texcodierung mit. Bei Windowssystemen: ansinew
-\usepackage[T1]{fontenc} 		% ermöglicht die Silbentrennung von Wörtern mit Umlauten
+\usepackage[english]{babel}		% changed to remove German
+\usepackage[utf8]{inputenc}		% teilt LaTeX die Texcodierung mit. Bei Windowssystemen: ansinew
+\usepackage[T1]{fontenc}		% ermöglicht die Silbentrennung von Wörtern mit Umlauten
 
 \usepackage[usenames,dvipsnames]{color}
 
@@ -19,10 +19,11 @@
 \usepackage{lscape}
 
 \usepackage{amssymb,amsmath}
+\newcommand*\diff{\mathop{}\!\mathrm{d}}				% For nice differentials in integrals
 
 \usepackage{geometry} 
 \geometry{a4paper} 
-\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line
+\usepackage[parfill]{parskip}						% Activate to begin paragraphs with an empty line
 \usepackage[pdftex]{graphicx}
 \usepackage{epstopdf}
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
@@ -30,8 +31,8 @@
 
 \usepackage[usenames]{color}
 
-\usepackage{listings} 							% Einfügen von Programmcode
-\lstset{numbers=left, numberstyle=\tiny, numbersep=5pt} 	% mit Zeilennummerierung links
+\usepackage{listings}							% Einfügen von Programmcode
+\lstset{numbers=left, numberstyle=\tiny, numbersep=5pt}		% mit Zeilennummerierung links
 \lstset{language=[77]Fortran}						% Programming language: Fortran77
 
 
@@ -48,10 +49,10 @@
 \setlength{\headheight}{0pt}
 
 
-%\typearea{12} % Breite des bedruckten Bereiches vergrössern (funktioniert nur in \documentclass mit: scrreprt, scrartcl, scrbook)
+%\typearea{12} % Increase the width of the printed areas (functions only in \documentclass with: scrreprt, scrartcl, scrbook)
 
-\clubpenalty = 10000 		% schliesst Schusterjungen aus
-\widowpenalty = 10000 		% schliesst Hurenkinder aus
+\clubpenalty = 10000		% schliesst Schusterjungen aus
+\widowpenalty = 10000		% schliesst Hurenkinder aus
 
 
 \usepackage{fancyhdr}
@@ -62,28 +63,28 @@
 \fancyhf{}
 \fancyfoot{} 
 
-\renewcommand{\chaptermark}[1]{         		% Lower Case Chapter marker style
-\markboth{\chaptername\ \thechapter.\ #1}{}}	%
-\renewcommand{\sectionmark}[1]{         		% Lower case Section marker style
-\markright{\thesection.\ #1}}         			%
-\fancyfoot[R]{\thepage}    				% Page number in the right on every page
-\fancyhead[L]{\leftmark}       				% Chapter in the right on even pages
-\fancyhead[L]{\rightmark}     				% Section in the left on odd pages
-\renewcommand{\headrulewidth}{0.3pt}		% Width of head rule
+\renewcommand{\chaptermark}[1]{				% Lower Case Chapter marker style
+\markboth{\chaptername\ \thechapter.\ #1}{}}		%
+\renewcommand{\sectionmark}[1]{				% Lower case Section marker style
+\markright{\thesection.\ #1}}					%
+\fancyfoot[R]{\thepage}						% Page number in the right on every page
+\fancyhead[L]{\leftmark}						% Chapter in the right on even pages	
+\fancyhead[L]{\rightmark}						% Section in the left on odd pages
+\renewcommand{\headrulewidth}{0.3pt}			% Width of head rule
 
-\fancypagestyle{plain}{					%
-\fancyhf{}							% clear all header and footer fields
-\fancyfoot[R]{\thepage}    				% Page number in the right on every page
-\fancyhead[L]{\leftmark}       				% Chapter in the right on even pages
-\renewcommand{\headrulewidth}{0.3pt}}   		% Width of head rule
+\fancypagestyle{plain}{						%
+\fancyhf{}								% clear all header and footer fields
+\fancyfoot[R]{\thepage}						% Page number in the right on every page
+\fancyhead[L]{\leftmark}						% Chapter in the right on even pages
+\renewcommand{\headrulewidth}{0.3pt}}			% Width of head rule
 
 
-\setlength{\textheight}{21cm}				% Vergrössert die Höhe des bedruckbaren Bereichs
+\setlength{\textheight}{21cm}					% Increase the height of the printed areas
 
 
 \begin{document}
 
-\frontmatter							% Roman numeral page numbers
+\frontmatter								% Roman numeral page numbers
 
 % TITLE PAGE
 % ***************************************************************************************************

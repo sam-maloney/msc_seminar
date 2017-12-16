@@ -1,21 +1,31 @@
 \chapter{Introduction}
 
-%Chapter giving an introduction to the topic and the present work
+% Chapter giving an introduction to the topic and the present work
 
-DNS is computationally expensive, so go TLES!
+Achieving accurate simulations of turbulent fluid flows is a challenging computational task, due to the large range of different length scales that must be resolved for proper representation of the physical processes in such high Reynolds Number ($Re$) flows. It has been shown that the ratio between the largest and smallest spatial features (at the Kolmogorov length scale) in a turbulent flow varies as $Re^{3/4}$ \cite{Pruett2008}. Since turbulence is an inherently 3-dimensional phenomenon, this means that full Direct Numerical Simulation (DNS) of turbulent flows have a computational cost which scales as $Re^3$ for the three spatial dimensions and time. This scaling imposes a very strong limitation on the magnitudes of $Re$ which can be handled by DNS, and therefore various models for turbulence which are less computationally intensive have been developed.
 
-An brief overview of some of the basic theory underpinning TLES is presented next, adapting from the work presented by Pruett \cite{Pruett2008} and Jenny \cite{Jenny2016}.
+Large Eddy Simulations (LES) are one such class of methods, where only the large scale features of the flow are resolved directly, thus allowing for a coarser mesh to be used, while the effects of smaller scale flow features are modelled. Low-pass filtering of the velocity fields is used to damp out the high wave number oscillations that are unresolved by the coarse mesh, and applying such a filtering operations to the momentum equation results in a closure problem for the residual stresses of the unresolved subfilter scale (SFS) flows. To date, most LES type simulations have been performed by filtering in the spatial-domain, and then using closures such as Smagorinsky eddy-viscosity models \cite{Smagorinsky1963}, deconvolution methods \cite{Stolz1999}, and dynamic modelling \cite{Germano1991}.
 
-\section{TLES}
+More recently, Pruett \cite{Pruett2000} developed an LES type scheme using filtering in the time, rather than the spatial, domain. This new technique, termed Temporal LES (TLES), is based on the idea that removing high-frequency temporal fluctuations of the flow will correspondlingly remove high wavenumber spatial features and thus still allow for the use of coarser resolutions for simulation. Several potential advantages of TLES over conventional LES are elucidated by Pruett and briefly summarized here.
+
+First, because methods based on the Reynolds Averaged Navier-Stokes (RANS) equations also utilize time-domain filtering, the linkage between RANS and TLES is more natural than for spatial LES. Second, as most experimental data of turbulence are acquired in the time-domain, it might also be more natural to carry out computations in the time-domain. Third, ``differentiation-operator/filter-operator commutation error is problematic for spatial filtering on finite domains or highly stretched grids.'' Fourth, the filter width for LES should be significantly larger than the grid spacing for proper separation of resolved and unresolved scales, but this is often not possible in practice, while for TLES the filter width is a theoretically tunable parameter from zero to infinity. Finally, TLES is much more amenable to time-dependent point sources which are sometimes used for manipulation of engineering problems.
+
+A brief overview of some of the basic theory underpinning TLES is presented next, adapting primarily from the work done by Pruett \cite{Pruett2008} and Jenny \cite{Jenny2016}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{TLES Theory}
 
 Since for TLES filtering is done during the course of the numerical experiments, the filtering operation must be \emph{causal}, ie. it must depend only upon the current and previous values of the quantity being filtered and not on any future values. Letting an overbar denote a time-filtered quantity and $T$ denote the characteristic filter width, one obtains the following causal time-filtering operation for some filter kernal $G(t,T)$:
 \begin{equation}
-\bar{f}(t,T)=\int_{-\infty}^{t}G(\tau -t;T)f(\tau)d\tau
+\bar{f}(t,T)=\int_{-\infty}^{t}G(\tau -t;T)f(\tau)\diff\tau
 \end{equation}
 
-In this work only the exponential filter is discussed, namely:
+For this project only the exponential filter was used, namely:
 \begin{equation}
-G(t;T)=\frac{\exp(t/T)}{T} \longrightarrow \bar{f}(t,T)=\frac{1}{T}\int_{-\infty}^{t}\exp\left(\frac{\tau-t}{T}\right)f(\tau)d\tau
+\begin{split}
+G(t;T)&=\frac{\exp(t/T)}{T} \\
+\bar{f}(t,T)&=\frac{1}{T}\int_{-\infty}^{t}\exp\left(\frac{\tau-t}{T}\right)f(\tau)\diff\tau
+\end{split}
 \end{equation}
 
 which is a second order low-pass filter and has the transfer function:
@@ -28,20 +38,20 @@ Since the integral formulation would require storage of the quanitity at all pre
 \frac{\partial \bar{f}}{\partial t}=\frac{f-\bar{f}}{T}
 \end{equation}
 
-Applying such a filtering operation to the incompressible Navier-Stokes equations gives the following system for the evolution of temporally-filtered velocity fields, using the same initial condition as for the unfiltered fields $\bar{u}(0,x;T)=u(0,x)$:
-\begin{equation}
+Applying such a filtering operation to the incompressible Navier-Stokes equations gives the following Temporally-Filtered Navier-Stokes (TFNS) system for the evolution of the temporally-filtered velocity fields, using the same initial condition as for the unfiltered fields $\bar{u}(0,x;T)=u(0,x)$:
+\begin{equation} \label{div}
 \frac{\partial \bar{u}_j}{\partial x_j}=0
 \end{equation}
 \begin{equation} \label{TFNS}
 \frac{\partial \bar{u}_i}{\partial t}+\frac{\partial (\bar{u}_i\bar{u}_j)}{\partial x_j}=-\frac{\partial \bar{p}}{\partial x_i}+\nu \frac{\partial^2 \bar{u}_i}{\partial x_j \partial x_j}-\frac{\partial \tau_{ij}}{\partial x_j}
 \end{equation}
 
-where $u$ is the fluid velocity, $p$ is the pressure, $\nu$ is the kinematic pressure, and subscripts $i,j\in\{1,2,3\}$ indicate the 3D cartesian direction. The element $\tau$ in the final term is referred to as the \emph{temporal stress tensor} and is defined as:
+where $u$ is the fluid velocity, $p$ is the pressure, $\nu$ is the kinematic pressure, and subscripts $i,j\in\{1,2,3\}$ indicate the 3D cartesian direction. The element $\tau_{ij}$ in the final term is referred to as the \emph{temporal stress tensor} and is defined as:
 \begin{equation}
 \tau_{ij}=\overline{u_i u}_j-\bar{u}_i\bar{u}_j
 \end{equation}
 
-Solving the temporally-filtered Navier-Stokes equations requires a residual-stress model to handle the unkown value $\overline{u_i u}_j$ and close the system. Stolz and Adams \cite{Stolz2001} dveloped an approximate deconvolution model (ADM) for for spatial LES which was then adapted for TLES by Pruett \cite{Pruett2008}. For this project, however, a new method termed the temporal exact deconvolution model TEDM created by Jenny \cite{Jenny2016} is used to provide the closure.
+Solving the temporally-filtered Navier-Stokes equations requires a residual-stress model to handle the unkown value $\overline{u_i u}_j$ and close the system. Stolz and Adams \cite{Stolz2001} published an approximate deconvolution model (ADM) for for spatial LES which was then adapted for TLES by Pruett \cite{Pruett2008}. For this project, however, a new method termed the Temporal Exact Deconvolution Model (TEDM) developed by Jenny \cite{Jenny2016} is used to provide the closure.
 
 For the TEDM method, it is observed that by inserting the velocity field into the differential form of the filter given in Eq. (\ref{filter_diff}) the unfiltered field can be recovered as follows:
 \begin{equation} \label{deconv}
@@ -57,17 +67,45 @@ The same Eq. (\ref{filter_diff}) can then be applied to the unknown quantity $\o
 \end{split}
 \end{equation}
 
-This can then be rearranged to produce an equation for the time evolution of the temporal stress tensor $\tau$ containing only the known filtered velocities:
+This can then be rearranged to produce an equation for the time evolution of the temporal stress tensor $\tau_{ij}$ containing only the known filtered velocities:
 \begin{equation} \label{tau}
 \frac{\partial \tau_{ij}}{\partial t}=-\frac{\tau_{ij}}{T}+T\frac{\partial \bar{u}_i}{\partial t}\frac{\partial \bar{u}_j}{\partial t}
 \end{equation}
 
 Suitable time integration schemes can then be used to solve Eqs. (\ref{TFNS}) and (\ref{tau}) in alternation to evolve the system in time.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Regularization}
 
-A regularization term based on work by \AA kervik et al. \cite{Akervik2006} was investigated as a potential means to improve the stability of the method, and is outlined here.
+In order to sufficiently damp the higher frequency oscillations and allow the use of coarser grids for simulations, the filter width $T$ must be made large enough, often several orders of magnitude above the timestep. However, for such large filter widths the method becomes highly non-dissipative, which leads to instability in the numerical evolution. For this reason, a regularization term based on work by \AA kervik et al. \cite{Akervik2006} was investigated as a potential means to improve the stability of the method, and is briefly outlined here.
 
+The form of the regularization term is that of a proportional feedback control mechanism, well known in control theory. It manifests itself in the TFNS system Eq. (\ref{TFNS}) as an additional linear term on the right hand side:
+\begin{equation}
+-\chi(\bar{u}-\tilde{u})
+\end{equation}
+
+where $\chi$ is the control coefficient for the strength of the regularization effect and $\tilde{u}$ represents the velocity field after being temporally filtered using a filter width $\tilde{T}$ which is larger than the original filter width $T$ used to compute $\bar{u}$. This $\tilde{T}>T$ relation means that $\tilde{u}$ should contain only lower frequency variations compared to $\bar{u}$ and therefore provides a slower varying target solution towards whcih $\bar{u}$ is forced, damping out high frequency changes in its value and, hopefully, also in the growth of instabilities.
+
+Both $\chi$ and $\tilde{T}$ are free parameters that can be tuned to try and stabliize a given system. It is noted that larger values of $\chi$ would be expected to slow down the evolution of the system and it is therefore desirable to set $\chi$ close to the minimal value for which the simulation is stable, in order to eliminate unecessary increases in the time required for the system to evolve.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Divergence Cleaning}
 
-An implicit condition of the incompressible Navier-Stokes equations is that the divergence of the velocity field must be zero. However, numerical discretization schemes generally lead to non-zero values of the divergence which can be a potential source of isntability during simulations. To this end, explicit divergence cleaning (DC) using the projection scheme, following the procedure outlined in section 5 of the work by T\'oth \cite{Toth2000} for DC of magnetic fields, was also considered for possible stabilizing effects.
+An implicit condition of the TFNS system given in Eq. (\ref{div}) is that the divergence of the velocity field must be zero. However, numerical discretization schemes generally lead to non-zero values of the divergence which can be a potential source of instability during simulations. As well, since Eq. (\ref{div}) is not explicitly included in the standard TLES algorithm of alternating solutions of Eqs. (\ref{TFNS}) and (\ref{tau}), any non-zero divergence resulting from each numerical timestep is simply allowed to accrue in the system. To counter this, explicit divergence cleaning (DC) using the projection scheme, following the procedure outlined in section 5 of the work by T\'oth \cite{Toth2000} for DC of magnetic fields, was also considered for possible stabilizing effects.
+
+The mathematical basis for the projection scheme lies in the ability to decompose any vector field into the sum of a curl and a gradient according to the Helmholtz-Hodge decomposition:
+\begin{equation}
+\bar{u}^*=\nabla\times A+\nabla\phi
+\end{equation}
+
+where $\bar{u}^*$ is the filtered velocity field computed by advancing the numerical discretization of Eq. (\ref{TFNS}) at the current timestep, $A$ is a vector potential containing the phsyically menaingful (ie. divergence free) component of $\bar{u}^*$, and $\phi$ is a scalar field contatining the non-zero divergence that is to be removed. Taking the divergence of both sides gives:
+\begin{equation}
+\nabla^2 \phi=\nabla\cdot\bar{u}^*
+\end{equation}
+
+which is a Poisson equation for the non-physical component $\phi$. Therefore, our TLES method can be augmented with DC by solving this Poisson equation during each timestep immediately after computing $\bar{u}^*$ and then correcting the filtered velocity field as:
+\begin{equation}
+\bar{u}=\bar{u}^*-\nabla\phi
+\end{equation}
+
+It is noted that while the projection scheme is able to zero out the divergence to machine precision in the given discretization scheme, in general the divergence will still be non-zero in any other discretization. Therefore, it is usually sufficient to make the divergence merely \emph{close} to zero in the given discretization, and save the computational effort required for a very precise solution of the Poisson problem. This is easily achieved in practice by using iterative solution methods and setting the tolerance to a much less stringent condition than is used for solving the other equations in the TLES method.
