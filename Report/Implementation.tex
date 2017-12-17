@@ -3,3 +3,15 @@
 % Chapter giving an overview of the implementation of the method in OpenFOAM
 
 For this project, all implementation of the regularization term and divergence cleaning scheme was carried out in C++ using the open source OpenFOAM CFD code. A solver developed during a previous project at the institute, which implemented the fundamental TLES methodology, was used as a starting code. This solver already contained the necessary code for discretizing and solving Eq. (\ref{TFNS}) in the TFNS system for the filtered velocity, Eq. (\ref{tau}) for the temporal stress tensor, as well as computing the deconvoluted velocity field according to the TEDM and the mean filtered velocity field for statistical comparison and validation of the methods.
+
+For a numerical discretization scheme using a timestep $\Delta t$, the filter width $T$ is naturally parameterized by defining a filter width ratio $r$ as:
+\begin{equation} \label{r}
+r=\frac{T}{\Delta t}
+\end{equation}
+
+A similar quanitity can also be defined for the filter used in generating the regularization quantity $\tilde{u}$ by defining a regularization filter width ratio $\tilde{r}$ as:
+\begin{equation}
+\tilde{r}=\frac{\tilde{T}}{T}
+\end{equation}
+
+This definition of the ratios implies the restriction $\tilde{r}>1$ for logical consistency with the regularization theory, while in theory any $r>0$ is permissible. However, as stated in section \ref{TLES_theory}, it is deisrable to have $T>\Delta t$ and so $r>1$ can be considered as a practical limitation for the method to be of much use.

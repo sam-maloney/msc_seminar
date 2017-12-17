@@ -2,6 +2,27 @@
 
 %Chapter giving an overview of the numerical results obtained from the implementation
 
-All simulations were carried out on the standard Pitz-Daily backward facing step geometry provided with OpenFOAM. The numerical viscosity of $\nu=10^{-5}\,m^2/s$ and the inlet velocity of $u=10\,m/s$ were kept constant for all runs. Using this inlet velocity and the channel width $L=50.8\,mm$, the Reynold's number of the flow can be approximated as: $$ Re=\frac{uL}{\nu}=50800$$
+All simulations were carried out on the standard Pitz-Daily backward facing step geometry provided with OpenFOAM. The kinematic viscosity of $\nu=10^{-5}\,\mathrm{m}^2/\mathrm{s}$ and the inlet velocity of $u=10\,\mathrm{m}/\mathrm{s}$ were kept constant for all runs. Using this inlet velocity and the channel width $L=50.8\,\mathrm{mm}$, the Reynolds number of the flow can be approximated as: $$ Re=\frac{uL}{\nu}=50800$$
 
-Since most cases of instability in the simulation manifested within the first few dozen time steps (approx. 30-40 or less), and given the large number of parameter sets that needed to be tested, for the purposes of this resport a simulation was considered 'stable' if it ran for 100 timesteps without failing. It is noted that a small number of the runs performed crashed even after 80+ timesteps, so this 100 timestep rule is certainly not an ironclad guarantee of stability over a much longer run. However, as in all of these cases it was the transition from stable to unstable that was under investigation, it suffices to warn that the reported minimal $\chi$ values required for stability should be regarded as providing only marginal stability, and slightly larger values might be safer in a real simulation to provide some margin of safety.
+In order to provide a somewhat objective measure of comparison between the results of the method using different sets of parameters, a vertical line profile of the mean magnitude of the unfiltered velocity field was taken at the location shown in Fig. \ref{fig:line_location} after each run. As well, a simulation using a simple direct solution of the Navier-Stokes equations was performed as a baseline. It must be noted that this is not a true DNS comparison, as the simulation was performed on the same grid as used for all of the following TLES testing, and so is not fine enough to resolve the full range of scales of the system in general. Since such a fully-resolved DNS simulation was prohibitively time-consuming for this project, the under-resolved baseline case was considered acceptable to at least check for any large deviations resulting from the methods being tested, and for simplicity is referred to as DNS in the following analysis. The location of the line was chosen to be at the minimum value of the recirculation vortex in the DNS baseline, so as to have a distinct feature to compare with between runs.
+
+\begin{figure}[!b]
+\centering
+\includegraphics[width=0.75\textwidth]{figures/line_location.pdf}
+\caption{Representative image of a $|\bar{u}|_{\mathrm{mean}}$ velocity field with a white line showing the location $x=28.6\,\mathrm{mm}$ past the step at which the comparison profiles were captured}
+\label{fig:line_location}
+\end{figure}
+
+To start with, several simulations were run using only the basic TLES implementation, with no regularization or DC. This gave one free parameter to be varied, the filter width ratio $r$, and the resulting profiles were taken at an end time of $t_\mathrm{final}=0.1$ using a time step of $\Delta t=10^{-6}$ for all runs. It was observed that the simulation becomes unstable if the filter width is made too large, and so this value of the time step was chosen as it gave a small range of vales, up to $r=28$, for which the method was stable and any effects of varying $r$ in isolation could be observed.
+
+The results of this initial study are shown in Fig. \ref{fig:line_data_no_reg} and the profiles from the various runs are seen to lie almost completely atop one another. This would seem to suggest that the effect of $r$ is minimal within the range of values which are stable without regularization.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.75\textwidth]{figures/line_data_no_reg.pdf}
+\caption{Comparison of line profiles from the $|\bar{u}|_{\mathrm{mean}}$ velocity field at $x=28.6\,\mathrm{mm}$ for various values of filter width $r$, taken at $t_\mathrm{final}=0.1$ and using $\Delta t=10^{-6}$}
+\label{fig:line_data_no_reg}
+\end{figure}
+
+Since most cases of instability in the simulation manifested within the first few dozen time steps (approx. 30-40 or less), and given the large number of parameter sets that needed to be tested, for the purposes of this resport a simulation was considered `stable' if it ran for 100 timesteps without failing. It is noted that a small number of the runs performed crashed even after 80+ timesteps, so this 100 timestep rule is certainly not an ironclad guarantee of stability over a much longer run. However, as in all of these cases it was the transition from stable to unstable that was under investigation, it suffices to warn that the reported minimal $\chi$ values required for stability should be regarded as providing only marginal stability, and slightly larger values might be safer in a real simulations to provide some margin of safety.
+

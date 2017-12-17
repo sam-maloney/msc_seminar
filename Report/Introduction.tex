@@ -13,7 +13,7 @@ First, because methods based on the Reynolds Averaged Navier-Stokes (RANS) equat
 A brief overview of some of the basic theory underpinning TLES is presented next, adapting primarily from the work done by Pruett \cite{Pruett2008} and Jenny \cite{Jenny2016}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{TLES Theory}
+\section{TLES Theory} \label{TLES_theory}
 
 Since for TLES filtering is done during the course of the numerical experiments, the filtering operation must be \emph{causal}, ie. it must depend only upon the current and previous values of the quantity being filtered and not on any future values. Letting an overbar denote a time-filtered quantity and $T$ denote the characteristic filter width, one obtains the following causal time-filtering operation for some filter kernal $G(t,T)$:
 \begin{equation}
