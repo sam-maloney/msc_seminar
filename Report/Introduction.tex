@@ -13,7 +13,7 @@ First, because methods based on the Reynolds Averaged Navier-Stokes (RANS) equat
 A brief overview of some of the basic theory underpinning TLES is presented next, adapting primarily from the work done by Pruett \cite{Pruett2008} and Jenny \cite{Jenny2016}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{TLES Theory} \label{TLES_theory}
+\section{TLES Theory} \label{sec:TLES}
 
 Since for TLES filtering is done during the course of the numerical experiments, the filtering operation must be \emph{causal}, ie. it must depend only upon the current and previous values of the quantity being filtered and not on any future values. Letting an overbar denote a time-filtered quantity and $T$ denote the characteristic filter width, one obtains the following causal time-filtering operation for some filter kernal $G(t,T)$:
 \begin{equation}
@@ -75,7 +75,7 @@ This can then be rearranged to produce an equation for the time evolution of the
 Suitable time integration schemes can then be used to solve Eqs. (\ref{TFNS}) and (\ref{tau}) in alternation to evolve the system in time.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Regularization}
+\section{Regularization} \label{sec:Reg}
 
 In order to sufficiently damp the higher frequency oscillations and allow the use of coarser grids for simulations, the filter width $T$ must be made large enough, often several orders of magnitude above the timestep. However, for such large filter widths the method becomes highly non-dissipative, which leads to instability in the numerical evolution. For this reason, a regularization term based on work by \AA kervik et al. \cite{Akervik2006} was investigated as a potential means to improve the stability of the method, and is briefly outlined here.
 
@@ -89,7 +89,7 @@ where $\chi$ is the control coefficient for the strength of the regularization e
 Both $\chi$ and $\tilde{T}$ are free parameters that can be tuned to try and stabliize a given system. It is noted that larger values of $\chi$ would be expected to slow down the evolution of the system and it is therefore desirable to set $\chi$ close to the minimal value for which the simulation is stable, in order to eliminate unecessary increases in the time required for the system to evolve.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Divergence Cleaning}
+\section{Divergence Cleaning} \label{sec:DC}
 
 An implicit condition of the TFNS system given in Eq. (\ref{div}) is that the divergence of the velocity field must be zero. However, numerical discretization schemes generally lead to non-zero values of the divergence which can be a potential source of instability during simulations. As well, since Eq. (\ref{div}) is not explicitly included in the standard TLES algorithm of alternating solutions of Eqs. (\ref{TFNS}) and (\ref{tau}), any non-zero divergence resulting from each numerical timestep is simply allowed to accrue in the system. To counter this, explicit divergence cleaning (DC) using the projection scheme, following the procedure outlined in section 5 of the work by T\'oth \cite{Toth2000} for DC of magnetic fields, was also considered for possible stabilizing effects.
 
@@ -99,7 +99,7 @@ The mathematical basis for the projection scheme lies in the ability to decompos
 \end{equation}
 
 where $\bar{u}^*$ is the filtered velocity field computed by advancing the numerical discretization of Eq. (\ref{TFNS}) at the current timestep, $A$ is a vector potential containing the phsyically menaingful (ie. divergence free) component of $\bar{u}^*$, and $\phi$ is a scalar field contatining the non-zero divergence that is to be removed. Taking the divergence of both sides gives:
-\begin{equation}
+\begin{equation} \label{eq:poisson}
 \nabla^2 \phi=\nabla\cdot\bar{u}^*
 \end{equation}
 

@@ -1,4 +1,4 @@
-\chapter{Implementation}
+\chapter{Implementation} \label{chap:Imp}
 
 % Chapter giving an overview of the implementation of the method in OpenFOAM
 
@@ -14,4 +14,6 @@ A similar quanitity can also be defined for the filter used in generating the re
 \tilde{r}=\frac{\tilde{T}}{T}
 \end{equation}
 
-This definition of the ratios implies the restriction $\tilde{r}>1$ for logical consistency with the regularization theory, while in theory any $r>0$ is permissible. However, as stated in section \ref{TLES_theory}, it is deisrable to have $T>\Delta t$ and so $r>1$ can be considered as a practical limitation for the method to be of much use.
+This definition of the ratios implies the restriction $\tilde{r}>1$ for logical consistency with the regularization theory, while in theory any $r>0$ is permissible. However, as stated in section \ref{sec:TLES}, it is deisrable to have $T>\Delta t$ and so $r>1$ can be considered as a practical limitation for the method to be of much use.
+
+As suggested in section \ref{sec:DC}, the DC method can be implemented in a computationally efficient manner quite easily in OpenFOAM by specifying an iterative solver for the Poisson Eq. (\ref{eq:poisson}) in the `fvSolution' file with a relatively non-stringent tolerance. For this project, the same solver type was used as for the regular filtered velocity field, but the tolerance was relaxed from $10^{-5}$ to $10^{-2}$ as this did not noticeably affect the size of the increased range of stability, but did greatly reduce the observed computational time.
