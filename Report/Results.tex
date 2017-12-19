@@ -1,4 +1,4 @@
-\chapter{Results}
+\chapter{Results and Discussion}
 
 % Chapter giving an overview of the numerical results obtained from the implementation
 
@@ -50,7 +50,7 @@ In Fig. \ref{fig:line_data_reg} is shown the result of a run at $r=30$, using re
 
 Two slight modifications of the regularization term in Eq. (\ref{eq:reg}) were also briefly investigated. The first used the de-convoluted velocity in place of the filtered velocity as $-\chi(u-\tilde{u})$ but it was found to provide less of a stabilizing influence. In particular, making $\chi$ too large caused the simulation to again become unstable, meaning there was a limited range of acceptable $\chi$ which which provided stability, while when using the filtered velocity no such upper bound was encountered during testing. As well, this range of acceptable $\chi$ values contracted with increasing filter widths, eventually vanishing entirely for large enough $r$, a limitation that was also not encountered for the formulation of Eq. (\ref{eq:reg}), which was able to stabilize all tested values of $r$ simply through comensurate increase in $\chi$.
 
-The second modification changed the computation of $\tilde{u}$. Instead of filtering the de-convoluted value 
+The second modification changed the computation of $\tilde{u}$. Instead of filtering the de-convoluted value, the filtered value $\bar{u}$ was simply filtered again with the same condition $\tilde{T}>T$ on the filter width of the second filtering operation, in effect producing a regulariztion term $-\chi(\bar{u}-\tilde{\bar{u}})$. This set-up followed more closely the methodology of \AA kervik et al. \cite{Akervik2006}, but was not investigated very deeply due to time constraints, and as it was found to produce almost exactly the same results as Eq. (\ref{eq:reg}), no immediate benefits were obvious.
 
 \subsection{Minimum Stabilizing $\chi$}
 
@@ -65,7 +65,7 @@ To investigate any potential relationship between the smallest value of $\chi$ f
 \label{fig:min_chi_dt5_r100}
 \end{figure}
 
-Fig. \ref{fig:min_chi_dt5_r10} shows the second series of data  with the time step still at $\Delta t=10^{-5}$ but reducing the regularization filter width ratio to $\tilde{r}=10$. An extremely linear relation is observed, with only a slight increase in the slope and slight decrease in the intercept, and both changes being less than $2.5\%$ compared to the order of magnitude decrease in $\tilde{r}$. This suggests only a weak relation between the required $\chi$ and $\tilde{r}$ but would ccertainly require more data points to confirm, particularly for very large $\tilde{r}$ and values close to the base TLES filter width where $\tilde{r}$ approaches $1$.
+Fig. \ref{fig:min_chi_dt5_r10} shows the second series of data  with the time step still at $\Delta t=10^{-5}$ but reducing the regularization filter width ratio to $\tilde{r}=10$. An extremely linear relation is observed, with only a slight increase in the slope and slight decrease in the intercept, and both changes being less than $2.5\%$ compared to the order of magnitude decrease in $\tilde{r}$. This suggests only a weak relation between the required $\chi$ and $\tilde{r}$ but would ccertainly require more data points to confirm, particularly for values of $\tilde{r}$ which are very large and those close to the base TLES filter width where $\tilde{r}$ approaches one.
 
 \begin{figure}[!tb]
 \centering
@@ -74,9 +74,17 @@ Fig. \ref{fig:min_chi_dt5_r10} shows the second series of data  with the time st
 \label{fig:min_chi_dt5_r10}
 \end{figure}
 
-\begin{figure}[!tb]
+Data for the third and final series can be found in Fig. \ref{fig:min_chi_dt6_r100}, this time returning the regularization filter width ratio to $\tilde{r}=100$ but now decreasing the time step to $\Delta t=10^{-6}$. Once again the trend is linear, with the slope for this case being somewhat lower at $19377$, but still only a decrease of $8.4\%$  compared to an order of magnitude decrease in the time step, suggesting that the slope has only a weak dependence on the time step similarly as on $\tilde{r}$. On the other hand, the intercept displays a much stronger dependence on change in $\Delta t$, decreasing almost exactly sixfold, but additional data points would again be necessary to try and quantify the exact nature of the dependence relation.
+
+\begin{figure}[!t]
 \centering
 \includegraphics[width=0.75\textwidth]{figures/min_chi_dt6_r100.pdf}
 \caption{Minimum $\chi$ values required to stabilize simulation for various values of $r$, using $\Delta t=10^{-6}$ and $\tilde{r}=100$, and showing the linear least squares regression}
 \label{fig:min_chi_dt6_r100}
 \end{figure}
+
+It was observed that when analyzing the data output step-by-step for an unstable simulation, the problematic growth is observed to occur precisely at the sharp corner of the backwards facing step in the geometry. Such an obvious focal point would suggest a likely strong dependence of the stability behaviour for the TLES solver on the specific geometry under consideration. As such, any functional relationship between $\chi_{mathrm{min}}$ and the other method parameters would most likely be valid only for the geometry (and probably also the specific mesh) on which the data was measured.
+
+As well, the initial conditions used to initialize the simulation can also play a large role. While not thoroughly investigated by any means, it was found that using the data from the end of the baseline simulation for the starting values of a new simulation allowed extremely large filter widths to be used stably without regularization. For a time step of $\Delta t=10^{-6}$, filter width ratios of over $r=1200$ were able to run through 100 steps without failing compared to a maximum of $r=28$ with a uniform zero initial velocity condition, although a test at $r=1400$ still crashed so it is certainly not a complete cure for the instability. And while using such a well-developed baseline as a starting condition would be expensive in general (and rather defeat the purpose of an LES based model), since most runs failed within only a few dozen time steps or else not at all, it could be fruitful to investigate whether even just a few tens of interations at the start of a run with a stable parameter set could be used to greatly increase the stability of a full simulation with a more desirable but less stable model configuration.
+
+Finally, while the investigation focused on achieving stabilization when increasing the filter width, it was also observed that a simulation using a time step of $\Delta t=10^{-4}$, which was not stable for any filter width under the base method, was also able to be stabilized with a large enough $\chi$. This could offer one potential avenue to mitigate some of the effects of the slower evolution of the regularized system by allowing the use of larger time steps, although further investigation would again be necessary to determine the viability of such an approach.
