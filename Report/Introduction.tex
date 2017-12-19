@@ -80,7 +80,7 @@ Suitable time integration schemes can then be used to solve Eqs. (\ref{TFNS}) an
 In order to sufficiently damp the higher frequency oscillations and allow the use of coarser grids for simulations, the filter width $T$ must be made large enough, often several orders of magnitude above the timestep. However, for such large filter widths the method becomes highly non-dissipative, which leads to instability in the numerical evolution. For this reason, a regularization term based on work by \AA kervik et al. \cite{Akervik2006} was investigated as a potential means to improve the stability of the method, and is briefly outlined here.
 
 The form of the regularization term is that of a proportional feedback control mechanism, well known in control theory. It manifests itself in the TFNS system Eq. (\ref{TFNS}) as an additional linear term on the right hand side:
-\begin{equation}
+\begin{equation} \label{eq:reg}
 -\chi(\bar{u}-\tilde{u})
 \end{equation}
 
