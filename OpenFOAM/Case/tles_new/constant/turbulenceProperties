@@ -1,0 +1,40 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.3.0                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      turbulenceProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+// General
+
+// Pssible values for modelSwitch:
+// 0: DNS
+// 1: TEDM without regularization
+// 2: TEDM with regularization
+// 3: TEDM with regularization and divergence cleaning
+//    (To get divergence cleaning withouth regularization, set modelSwitch
+//     to 3 and then set chi to 0)
+modelSwitch        modelSwitch [0 0 0 0 0 0 0] 1;
+
+// Filter width T = dt*filterWidthRatio
+filterWidthRatio      filterWidthRatio [0 0 0 0 0 0 0] 3;
+
+// Regularizaton filter width T~ = T*filterWidthRatioReg
+filterWidthRatioReg   filterWidthRatioReg [0 0 0 0 0 0 0] 100;
+
+// Regularization coefficient (damping parameter)
+chi                   chi [ 0 0 -1 0 0 0 0 ] 1000000;
+
+
+
+
+// ************************************************************************* //
